@@ -1,0 +1,110 @@
+# Interval Training iOS App
+
+## Project Overview
+**Platform:** iOS
+**Language:** Swift
+**Target iOS Version:**
+**Development Start:**
+
+## Description
+[Brief description of the app's purpose and target audience]
+
+## Core Features
+- [ ] scale type and root input
+- [ ] input scale
+- [ ] input interval note
+- [ ] play results screen
+
+## Technical Stack
+- **UI Framework:** (SwiftUI / UIKit)
+- **Data Persistence:** (Core Data / SwiftData / UserDefaults)
+- **Audio:** AVFoundation
+- **Background Modes:**
+- **Third-party Libraries:**
+
+## App Architecture
+- **Pattern:** (MVVM / MVC / Clean Architecture)
+- **Key Components:**
+  - Models:
+  - Views:
+  - ViewModels/Controllers:
+  - Services:
+
+## Data Models
+### Workout
+```swift
+// Define workout structure
+```
+
+### Interval
+```swift
+// Define interval structure
+```
+
+## User Interface
+### Screens
+1. **Input Screen/**
+   - Input screen
+   - scale type buttons
+   - root buttons
+   - Start button
+   - Exit button to end program
+
+2. **Play Screen**
+   - input fields
+   - note buttons
+   - stop button
+   - in progress results
+   - Exit button to end program
+
+3. ** results Screen**
+   - show results, number of fails, number of correct
+   - "new session" button to go to input screen
+   - Exit button to end program
+   
+   
+## Core Functionality
+### Identify notes
+- input screen:
+-   Choice of the following:
+-   input scale type (Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aolian & Locrian)
+-   input root (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B)
+-   hit start button to start play session
+- play screen:
+-   second session seconds
+-   have the user input the scale in order from the root by selecting one of the displayed notes: (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B, hi C)
+-   verify each note input is the next note in the scale type.  maintain green if correct, red if not, counting errors.  
+-   play a sound for each note selected.
+-   randomly ask for an interval of one of the following: Minor 2nd, Major 2nd, Minor 3rd, Major 3rd, Fourth, Aug Forth/Dim Fifth, Fifth, Minor 6th,Major 6th, Minor 7th, Major 7th)
+-   Have the user input interval one of the displayed notes: (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B)
+-   play a sound for each note selected.
+-   verify note input is correct for the scale and the interval
+-   display a bass clef staff and display the note when selected on the staff.  When another selection is made, clear the note and draw the new one.  This applies to scale as well as interval input.
+-   stop the session when the user selects stop. go to results screen
+- results screen:
+-   number of errors
+-   session length in seconds
+-   "new session" button to got back to the input screen
+
+
+## Implementation Phases
+### Phase 1: MVP
+- [ ] Basic timer functionality
+- [ ] Input screen
+- [ ] Play screen
+- [ ] Start/stop controls
+- [ ] show results output after stop, number of correct, number of failrues
+
+## Design Notes
+- Color scheme:
+- Typography:
+- Icon style:
+- Animations:
+
+## Resources & References
+- [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
+- [Timer Best Practices](https://developer.apple.com/documentation/foundation/timer)
+-
+
+## Notes
+[Additional thoughts, decisions, and reminders]
