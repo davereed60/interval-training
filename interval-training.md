@@ -58,12 +58,21 @@
    - Exit button to end program
 
 3. ** results Screen**
-   - show results, number of fails, number of correct
+  s- show results, number of fails, number of correct
    - "new session" button to go to input screen
    - Exit button to end program
    
-   
 ## Core Functionality
+### how bass clef works:
+- Line Notes (Bottom to Top)
+- 1st Line (Bottom): G
+- 2nd Line: B
+- 3rd Line: D
+- 4th Line: F
+- 5th Line (Top): A
+- Spaces Between Lines: The four spaces between the lines represent the notes A-C-E-G (from bottom to top). A popular mnemonic for this is "All Cows Eat Grass".
+- Ledger Lines: When notes go above or below the five-line staff, small, temporary lines called ledger lines are used. For instance, Middle C (C4) sits on a ledger line just above the staff.
+Sequential Order: Notes move alphabetically from line to space to line (G-A-B-C-D-E-F-A). As notes move higher on the staff, their pitch becomes higher
 ### Identify notes
 - input screen:
 -   Choice of the following:

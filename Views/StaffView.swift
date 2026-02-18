@@ -12,6 +12,11 @@ struct StaffView: View {
     private let staffLineSpacing: CGFloat = 20
     private let staffWidth: CGFloat = 300
 
+    // Bass clef note reference (from md file):
+    // Lines (bottom to top): G, B, D, F, A
+    // Spaces (bottom to top): A, C, E, G (mnemonic: "All Cows Eat Grass")
+    // Sequential: G(line) - A(space) - B(line) - C(space) - D(line) - E(space) - F(line) - G(space) - A(line)
+
     var body: some View {
         ZStack {
             // Background
@@ -88,23 +93,24 @@ struct StaffView: View {
     }
 
     // Calculate Y offset for note position on staff
-    // Bass clef staff lines (bottom to top): G2, B2, D3, F3, A3
-    // Staff spaces (bottom to top): A2, C3, E3, G3
-    // Using A3 (top line) as reference point (position 0)
+    // Bass clef from md file:
+    // Lines (bottom to top): G, B, D, F, A
+    // Spaces (bottom to top): A, C, E, G
+    // Using D (middle line, 3rd line) as reference point (position 0)
     private func yOffsetForNote(_ note: Note) -> CGFloat {
         let notePositions: [Note: CGFloat] = [
-            .C: 5.0,      // C3 - space above 2nd line (B2)
-            .CSharp: 4.5, // C#3/Db3
-            .D: 4.0,      // D3 - middle line (3rd line)
-            .DSharp: 3.5, // D#3/Eb3
-            .E: 3.0,      // E3 - space above middle line
-            .F: 2.0,      // F3 - 4th line
-            .FSharp: 1.5, // F#3/Gb3
-            .G: 1.0,      // G3 - top space
-            .GSharp: 0.5, // G#3/Ab3
-            .A: 0.0,      // A3 - top line (5th line)
-            .ASharp: -0.5, // A#3/Bb3
-            .B: -1.0,     // B3 - ledger line above staff
+            .C: 1.0,      // C - space 2 (between B line and D line) "All Cows Eat Grass"
+            .CSharp: 0.5, // C# - between C space and D line
+            .D: 0.0,      // D - middle line (3rd line)
+            .DSharp: -0.5, // D# - between D line and E space
+            .E: -1.0,     // E - space 3 (between D line and F line)
+            .F: -2.0,     // F - 4th line
+            .FSharp: -2.5, // F# - between F line and G space
+            .G: -3.0,     // G - space 4 (top space, between F line and A line)
+            .GSharp: -3.5, // G# - between G space and A line
+            .A: -4.0,     // A - line 5 (top line)
+            .ASharp: -4.5, // A# - between A line and B ledger
+            .B: -5.0,     // B - ledger line above staff
         ]
 
         let position = notePositions[note] ?? 0.0
@@ -118,9 +124,13 @@ struct StaffView: View {
     private func ledgerLinesForNote(_ note: Note) -> [CGFloat] {
         var ledgerLines: [CGFloat] = []
 
-        // Only B3 needs a ledger line above the staff
-        if note == .B || note == .ASharp {
-            ledgerLines.append(-staffLineSpacing)
+        // B sits on a ledger line above the staff (above A which is the top line)
+        if note == .B {
+            ledgerLines.append(-staffLineSpacing * 2.5) // Position of B ledger line
+        }
+        // A# is between A (top line) and B (ledger), might need ledger for reference
+        if note == .ASharp {
+            ledgerLines.append(-staffLineSpacing * 2.5) // Show B ledger line for reference
         }
 
         return ledgerLines
