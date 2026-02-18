@@ -49,4 +49,12 @@ class AudioService {
             playerNode.play()
         }
     }
+
+    func playNoteSequence(_ notes: [Note], delay: TimeInterval = 0.6) {
+        for (index, note) in notes.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + (delay * Double(index))) {
+                self.playNote(note)
+            }
+        }
+    }
 }

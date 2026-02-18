@@ -7,8 +7,10 @@ struct ContentView: View {
         switch viewModel.currentScreen {
         case .input:
             InputView()
-        case .play:
-            PlayView()
+        case .scale:
+            ScaleView()
+        case .interval:
+            IntervalView()
         case .results:
             ResultsView()
         }

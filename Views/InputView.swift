@@ -59,19 +59,44 @@ struct InputView: View {
 
                 Spacer()
 
-                Button(action: {
-                    viewModel.startSession()
-                }) {
-                    Text("Start")
-                        .font(.title2)
-                        .fontWeight(.semibold)
+                // Training mode selection buttons
+                HStack(spacing: 15) {
+                    Button(action: {
+                        viewModel.startScaleTraining()
+                    }) {
+                        VStack {
+                            Text("Scale")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            Text("Training")
+                                .font(.caption)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(viewModel.session.scaleType != nil && viewModel.session.rootNote != nil ? Color.blue : Color.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(15)
+                    }
+                    .disabled(viewModel.session.scaleType == nil || viewModel.session.rootNote == nil)
+
+                    Button(action: {
+                        viewModel.startIntervalTraining()
+                    }) {
+                        VStack {
+                            Text("Interval")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            Text("Training")
+                                .font(.caption)
+                        }
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(viewModel.session.scaleType != nil && viewModel.session.rootNote != nil ? Color.green : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(15)
+                    }
+                    .disabled(viewModel.session.scaleType == nil || viewModel.session.rootNote == nil)
                 }
-                .disabled(viewModel.session.scaleType == nil || viewModel.session.rootNote == nil)
                 .padding(.horizontal)
 
                 Button(action: {

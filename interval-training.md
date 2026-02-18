@@ -50,7 +50,7 @@
    - Start button
    - Exit button to end program
 
-2. **Play Screen**
+2. **Scake Screen**
    - input fields
    - note buttons
    - stop button
@@ -69,12 +69,17 @@
 -   Choice of the following:
 -   input scale type (Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aolian & Locrian)
 -   input root (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B)
--   hit start button to start play session
-- play screen:
--   second session seconds
+-   have two buttons scale and interval which take the user to the scale screen or interval screen
+- scale screen:
+-   for scale top, show not separation as W or H, for example Ionian is W-W-H-W-W-W-H
+-   show session seconds
 -   have the user input the scale in order from the root by selecting one of the displayed notes: (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B, hi C)
 -   verify each note input is the next note in the scale type.  maintain green if correct, red if not, counting errors.  
 -   play a sound for each note selected.
+-   display a bass clef staff and display the note when selected on the staff.  do not show a note on the staff if the note is incorrect.
+-   stop the session when the user selects stop. go to results screen
+- interval screen
+-   show session seconds
 -   randomly ask for an interval of one of the following: Minor 2nd, Major 2nd, Minor 3rd, Major 3rd, Fourth, Aug Forth/Dim Fifth, Fifth, Minor 6th,Major 6th, Minor 7th, Major 7th)
 -   Have the user input interval one of the displayed notes: (C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B)
 -   play a sound for each note selected.
@@ -108,3 +113,13 @@
 
 ## Notes
 [Additional thoughts, decisions, and reminders]
+- [ ] TODO: fix scale (right now displaying note as treble clef
+- [ ] TODO: separate scale training from interval training into separate functions
+- [ ] TODO: when choosing interval - show root and selected interval; also play root then interval for sound
+- [ ] TODO: display error rate, avg responce seconds in stats; create lift time values
+- [ ] TODO: extend to 9th and 11th intervals, etc.
+- [ ] TODO: show scale, e.g. W-W-H-W-W-W-H, for each scale type
+
+
+
+

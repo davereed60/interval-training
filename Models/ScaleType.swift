@@ -11,6 +11,13 @@ enum ScaleType: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var pattern: String {
+        let steps = zip(intervals, intervals.dropFirst()).map { current, next in
+            (next - current) == 2 ? "W" : "H"
+        }
+        return steps.joined(separator: "-")
+    }
+
     var intervals: [Int] {
         switch self {
         case .ionian:     return [0, 2, 4, 5, 7, 9, 11]  // Major scale

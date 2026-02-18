@@ -19,6 +19,8 @@
 		1A00000A00000000000000A /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000A00000000000000A /* SessionViewModel.swift */; };
 		1A00000B00000000000000B /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000B00000000000000B /* AudioService.swift */; };
 		1A00000C00000000000000C /* StaffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000D00000000000000D /* StaffView.swift */; };
+		1A00000E00000000000000E /* ScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000E00000000000000E /* ScaleView.swift */; };
+		1A00000F00000000000000F /* IntervalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A00000F00000000000000F /* IntervalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		2A00000B00000000000000B /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioService.swift; sourceTree = "<group>"; };
 		2A00000C00000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A00000D00000000000000D /* StaffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffView.swift; sourceTree = "<group>"; };
+		2A00000E00000000000000E /* ScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleView.swift; sourceTree = "<group>"; };
+		2A00000F00000000000000F /* IntervalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalView.swift; sourceTree = "<group>"; };
 		3A000001000000000000001 /* IntervalTraining.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IntervalTraining.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -93,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				2A000007000000000000007 /* InputView.swift */,
+				2A00000E00000000000000E /* ScaleView.swift */,
+				2A00000F00000000000000F /* IntervalView.swift */,
 				2A000008000000000000008 /* PlayView.swift */,
 				2A000009000000000000009 /* ResultsView.swift */,
 				2A00000D00000000000000D /* StaffView.swift */,
@@ -185,6 +191,8 @@
 				1A00000A00000000000000A /* SessionViewModel.swift in Sources */,
 				1A00000B00000000000000B /* AudioService.swift in Sources */,
 				1A00000C00000000000000C /* StaffView.swift in Sources */,
+				1A00000E00000000000000E /* ScaleView.swift in Sources */,
+				1A00000F00000000000000F /* IntervalView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
