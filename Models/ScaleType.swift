@@ -20,13 +20,13 @@ enum ScaleType: String, CaseIterable, Identifiable {
 
     var intervals: [Int] {
         switch self {
-        case .ionian:     return [0, 2, 4, 5, 7, 9, 11]  // Major scale
-        case .dorian:     return [0, 2, 3, 5, 7, 9, 10]
-        case .phrygian:   return [0, 1, 3, 5, 7, 8, 10]
-        case .lydian:     return [0, 2, 4, 6, 7, 9, 11]
-        case .mixolydian: return [0, 2, 4, 5, 7, 9, 10]
-        case .aeolian:    return [0, 2, 3, 5, 7, 8, 10]  // Natural minor
-        case .locrian:    return [0, 1, 3, 5, 6, 8, 10]
+        case .ionian:     return [0, 2, 4, 5, 7, 9, 11, 12]  // Major scale + octave
+        case .dorian:     return [0, 2, 3, 5, 7, 9, 10, 12]
+        case .phrygian:   return [0, 1, 3, 5, 7, 8, 10, 12]
+        case .lydian:     return [0, 2, 4, 6, 7, 9, 11, 12]
+        case .mixolydian: return [0, 2, 4, 5, 7, 9, 10, 12]
+        case .aeolian:    return [0, 2, 3, 5, 7, 8, 10, 12]  // Natural minor + octave
+        case .locrian:    return [0, 1, 3, 5, 6, 8, 10, 12]
         }
     }
 
