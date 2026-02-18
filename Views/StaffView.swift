@@ -212,8 +212,10 @@ struct StaffView: View {
 
     // Calculate positions for all notes in scale ensuring ascending order
     // Rule: Start as low as possible (E is lowest), always go up
+    // New rule: Each note should be exactly one position higher (next line or space)
     private func calculateScalePositions(_ notes: [Note]) -> [CGFloat] {
         var positions: [CGFloat] = []
+        let spacing = staffLineSpacing / 2.0
 
         for (index, note) in notes.enumerated() {
             var position: CGFloat
@@ -222,15 +224,12 @@ struct StaffView: View {
                 // First note: use lowest possible position
                 position = lowestPositionForNote(note)
             } else {
-                // Subsequent notes: try standard position, then ensure ascending
-                position = yOffsetForNote(note)
-
+                // Each subsequent note must be exactly ONE position higher
+                // Position values: ..., 4.0, 3.0, 2.0, 1.0, 0.0, -1.0, -2.0, -3.0, -4.0, -5.0, ...
+                // (Higher on staff = lower number)
+                // So next note should be: prevPosition - 1.0 * spacing
                 let prevPosition = positions[index - 1]
-                // If current position is not higher than previous, adjust it
-                if position >= prevPosition {
-                    // Move up by at least 0.5 step (half space)
-                    position = prevPosition - 0.5
-                }
+                position = prevPosition - 1.0 * spacing
             }
 
             positions.append(position)

@@ -76,6 +76,7 @@ Sequential Order: Notes move alphabetically from line to space to line (G-A-B-C-
 - Drawing notes:
 -   note should start as low as possible on the staff; the lowest note that can be drawn is an E
 -   as notes are drawn in a scale, make sure the note is always higher in the scale than the previos notes
+-   the next drawn note should not be more than one position higher, either the next space between lines or the next line depending on the scale.
 -   if a note is flat draw in the normal position, but preceed it "b"; if sharp, proceed the note with a "#"
 ### Identify notes
 - input screen:
