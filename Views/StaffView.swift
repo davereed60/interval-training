@@ -2,6 +2,12 @@ import SwiftUI
 
 struct StaffView: View {
     let selectedNote: Note?
+    let displayedNotes: [Note]?
+
+    init(selectedNote: Note? = nil, displayedNotes: [Note]? = nil) {
+        self.selectedNote = selectedNote
+        self.displayedNotes = displayedNotes
+    }
 
     private let staffLineSpacing: CGFloat = 20
     private let staffWidth: CGFloat = 300
@@ -32,8 +38,27 @@ struct StaffView: View {
                         .font(.system(size: 80))
                         .offset(x: 10, y: -10)
 
-                    // Note head if a note is selected
-                    if let note = selectedNote {
+                    // Display multiple notes if provided (for scale mode)
+                    if let notes = displayedNotes {
+                        ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
+                            let xOffset: CGFloat = 60 + CGFloat(index) * 25
+
+                            Circle()
+                                .fill(Color.black)
+                                .frame(width: 20, height: 15)
+                                .offset(x: xOffset, y: yOffsetForNote(note))
+
+                            // Ledger lines if needed
+                            ForEach(ledgerLinesForNote(note), id: \.self) { lineY in
+                                Rectangle()
+                                    .fill(Color.black)
+                                    .frame(width: 30, height: 2)
+                                    .offset(x: xOffset - 10, y: lineY)
+                            }
+                        }
+                    }
+                    // Single note if selected (for interval mode)
+                    else if let note = selectedNote {
                         Circle()
                             .fill(Color.black)
                             .frame(width: 20, height: 15)
@@ -63,39 +88,40 @@ struct StaffView: View {
     }
 
     // Calculate Y offset for note position on staff
-    // Bass clef: Lines are G2, B2, D3, F3, A3 (bottom to top)
-    // Spaces are A2, C3, E3, G3 (bottom to top)
+    // Bass clef: Lines from bottom to top are G2, B2, D3, F3, A3
+    // Spaces from bottom to top are A2, C3, E3, G3
+    // Position 0 = A3 (top line), increasing numbers go down
     private func yOffsetForNote(_ note: Note) -> CGFloat {
-        let notePositions: [Note: Int] = [
-            .C: 6,      // C2 - below staff
-            .CSharp: 5,  // C#2/Db2
-            .D: 5,      // D2
-            .DSharp: 4,  // D#2/Eb2
-            .E: 4,      // E2
-            .F: 3,      // F2
-            .FSharp: 2,  // F#2/Gb2
-            .G: 2,      // G2 - bottom line
-            .GSharp: 1,  // G#2/Ab2
-            .A: 1,      // A2 - first space
-            .ASharp: 0,  // A#2/Bb2
-            .B: 0,      // B2 - second line
+        let notePositions: [Note: CGFloat] = [
+            .C: 5.0,      // C3 - second space
+            .CSharp: 4.5, // C#3/Db3
+            .D: 4.0,      // D3 - middle line
+            .DSharp: 3.5, // D#3/Eb3
+            .E: 3.0,      // E3 - third space
+            .F: 2.0,      // F3 - fourth line
+            .FSharp: 1.5, // F#3/Gb3
+            .G: 1.0,      // G3 - top space
+            .GSharp: 0.5, // G#3/Ab3
+            .A: 0.0,      // A3 - top line
+            .ASharp: -0.5, // A#3/Bb3 - above staff
+            .B: -1.0,     // B3 - ledger line above
         ]
 
-        let position = notePositions[note] ?? 0
+        let position = notePositions[note] ?? 0.0
         let spacing = staffLineSpacing / 2.0
 
         // Convert position to Y offset (positive = down)
-        return CGFloat(position) * spacing
+        return position * spacing
     }
 
     // Determine if ledger lines are needed
     private func ledgerLinesForNote(_ note: Note) -> [CGFloat] {
         var ledgerLines: [CGFloat] = []
 
-        // Add ledger lines for notes outside the staff
-        // Middle C (C3) needs a ledger line above the staff
-        if note == .C {
-            ledgerLines.append(-staffLineSpacing * 2 - staffLineSpacing / 2)
+        // Add ledger lines for notes above the staff
+        if note == .B {
+            // B3 needs one ledger line above A3
+            ledgerLines.append(-staffLineSpacing)
         }
 
         return ledgerLines

@@ -55,8 +55,8 @@ struct ScaleView: View {
                     .font(.headline)
                     .foregroundColor(.secondary)
 
-                // Bass clef staff display - only show if note is correct
-                StaffView(selectedNote: viewModel.lastSelectedNote)
+                // Bass clef staff display - show all correct notes
+                StaffView(displayedNotes: viewModel.session.correctScaleNotes)
                     .padding(.horizontal)
 
                 Spacer()

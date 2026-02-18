@@ -72,7 +72,7 @@ class SessionViewModel: ObservableObject {
         let expectedNote = session.scale[session.currentScaleIndex]
 
         if note == expectedNote {
-            lastSelectedNote = note
+            session.correctScaleNotes.append(note)
             session.correctCount += 1
             feedbackColor = .green
             session.currentScaleIndex += 1
@@ -80,6 +80,7 @@ class SessionViewModel: ObservableObject {
             if session.currentScaleIndex >= session.scale.count {
                 // Scale complete - reset for next round
                 session.currentScaleIndex = 0
+                session.correctScaleNotes = []
             }
         } else {
             session.errorCount += 1

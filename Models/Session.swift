@@ -11,6 +11,7 @@ struct Session {
     var isInputtingScale: Bool = true
     var currentInterval: Interval?
     var currentIntervalRootNote: Note?
+    var correctScaleNotes: [Note] = []
 
     var sessionDuration: TimeInterval {
         guard let start = startTime, let end = endTime else { return 0 }
@@ -31,5 +32,6 @@ struct Session {
         isInputtingScale = true
         currentInterval = nil
         currentIntervalRootNote = nil
+        correctScaleNotes = []
     }
 }
