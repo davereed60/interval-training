@@ -143,6 +143,28 @@ struct StaffView: View {
         return position * spacing
     }
 
+    // Get lowest possible position for a note letter
+    // E is the lowest drawable note per specs
+    private func lowestPositionForNote(_ note: Note) -> CGFloat {
+        let baseLetter = baseNoteLetter(note)
+        let spacing = staffLineSpacing / 2.0
+
+        // Lowest positions (highest Y values / furthest down)
+        // E is the absolute lowest drawable note
+        let lowestPositions: [String: CGFloat] = [
+            "E": -1.0,    // E - space 3 (lowest drawable per specs)
+            "F": -2.0,    // F - 4th line
+            "G": 4.0,     // G - bottom line (not top space)
+            "A": 3.0,     // A - 1st space (not top line)
+            "B": 2.0,     // B - 2nd line
+            "C": 1.0,     // C - 2nd space
+            "D": 0.0      // D - middle line
+        ]
+
+        let position = lowestPositions[baseLetter] ?? 0.0
+        return position * spacing
+    }
+
     // Determine if ledger lines are needed for notes above the staff
     private func ledgerLinesForNote(_ note: Note) -> [CGFloat] {
         var ledgerLines: [CGFloat] = []
@@ -194,10 +216,15 @@ struct StaffView: View {
         var positions: [CGFloat] = []
 
         for (index, note) in notes.enumerated() {
-            var position = yOffsetForNote(note)
+            var position: CGFloat
 
-            // Ensure this note is higher (lower Y value) than previous
-            if index > 0 {
+            if index == 0 {
+                // First note: use lowest possible position
+                position = lowestPositionForNote(note)
+            } else {
+                // Subsequent notes: try standard position, then ensure ascending
+                position = yOffsetForNote(note)
+
                 let prevPosition = positions[index - 1]
                 // If current position is not higher than previous, adjust it
                 if position >= prevPosition {
