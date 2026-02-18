@@ -56,7 +56,7 @@ struct ScaleView: View {
                     .foregroundColor(.secondary)
 
                 // Bass clef staff display - show all correct notes
-                StaffView(displayedNotes: viewModel.session.correctScaleNotes)
+                StaffView(displayedNotes: viewModel.session.correctScaleNotes, isScaleMode: true)
                     .padding(.horizontal)
 
                 Spacer()

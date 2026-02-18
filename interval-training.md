@@ -73,6 +73,10 @@
 - Spaces Between Lines: The four spaces between the lines represent the notes A-C-E-G (from bottom to top). A popular mnemonic for this is "All Cows Eat Grass".
 - Ledger Lines: When notes go above or below the five-line staff, small, temporary lines called ledger lines are used. For instance, Middle C (C4) sits on a ledger line just above the staff.
 Sequential Order: Notes move alphabetically from line to space to line (G-A-B-C-D-E-F-A). As notes move higher on the staff, their pitch becomes higher
+- Drawing notes:
+-   note should start as low as possible on the staff; the lowest note that can be drawn is an E
+-   as notes are drawn in a scale, make sure the note is always higher in the scale than the previos notes
+-   if a note is flat draw in the normal position, but preceed it "b"; if sharp, proceed the note with a "#"
 ### Identify notes
 - input screen:
 -   Choice of the following:

@@ -3,10 +3,12 @@ import SwiftUI
 struct StaffView: View {
     let selectedNote: Note?
     let displayedNotes: [Note]?
+    let isScaleMode: Bool
 
-    init(selectedNote: Note? = nil, displayedNotes: [Note]? = nil) {
+    init(selectedNote: Note? = nil, displayedNotes: [Note]? = nil, isScaleMode: Bool = false) {
         self.selectedNote = selectedNote
         self.displayedNotes = displayedNotes
+        self.isScaleMode = isScaleMode
     }
 
     private let staffLineSpacing: CGFloat = 20
@@ -47,14 +49,24 @@ struct StaffView: View {
                     if let notes = displayedNotes {
                         ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
                             let xOffset: CGFloat = 60 + CGFloat(index) * 25
+                            let (position, accidental) = isScaleMode ?
+                                staffPositionForScaleNote(note, index: index, allNotes: notes) :
+                                (yOffsetForNote(note), accidentalForNote(note))
+
+                            // Accidental (sharp or flat)
+                            if let acc = accidental {
+                                Text(acc)
+                                    .font(.system(size: 16))
+                                    .offset(x: xOffset - 8, y: position)
+                            }
 
                             Circle()
                                 .fill(Color.black)
                                 .frame(width: 20, height: 15)
-                                .offset(x: xOffset, y: yOffsetForNote(note))
+                                .offset(x: xOffset, y: position)
 
                             // Ledger lines if needed
-                            ForEach(ledgerLinesForNote(note), id: \.self) { lineY in
+                            ForEach(ledgerLinesForPosition(position), id: \.self) { lineY in
                                 Rectangle()
                                     .fill(Color.black)
                                     .frame(width: 30, height: 2)
@@ -64,13 +76,23 @@ struct StaffView: View {
                     }
                     // Single note if selected (for interval mode)
                     else if let note = selectedNote {
+                        let position = yOffsetForNote(note)
+                        let accidental = accidentalForNote(note)
+
+                        // Accidental (sharp or flat)
+                        if let acc = accidental {
+                            Text(acc)
+                                .font(.system(size: 16))
+                                .offset(x: 112, y: position)
+                        }
+
                         Circle()
                             .fill(Color.black)
                             .frame(width: 20, height: 15)
-                            .offset(x: 120, y: yOffsetForNote(note))
+                            .offset(x: 120, y: position)
 
                         // Ledger lines if needed
-                        ForEach(ledgerLinesForNote(note), id: \.self) { lineY in
+                        ForEach(ledgerLinesForPosition(position), id: \.self) { lineY in
                             Rectangle()
                                 .fill(Color.black)
                                 .frame(width: 30, height: 2)
@@ -81,7 +103,7 @@ struct StaffView: View {
                         Text(note.rawValue)
                             .font(.headline)
                             .foregroundColor(.blue)
-                            .offset(x: 200, y: yOffsetForNote(note))
+                            .offset(x: 200, y: position)
                     }
                 }
                 .frame(width: staffWidth, height: staffLineSpacing * 4)
@@ -134,6 +156,77 @@ struct StaffView: View {
         }
 
         return ledgerLines
+    }
+
+    // Generate ledger lines based on Y position
+    private func ledgerLinesForPosition(_ yPosition: CGFloat) -> [CGFloat] {
+        var ledgerLines: [CGFloat] = []
+
+        // Check if note is above the staff (negative Y values)
+        if yPosition <= -staffLineSpacing * 2.5 {
+            // B ledger line
+            ledgerLines.append(-staffLineSpacing * 2.5)
+        }
+
+        return ledgerLines
+    }
+
+    // Get accidental symbol for a note (sharp or flat)
+    private func accidentalForNote(_ note: Note) -> String? {
+        switch note {
+        case .CSharp, .DSharp, .FSharp, .GSharp, .ASharp:
+            return "#"
+        default:
+            return nil
+        }
+    }
+
+    // Get the base note letter (C, D, E, F, G, A, or B)
+    private func baseNoteLetter(_ note: Note) -> String {
+        let noteString = note.rawValue
+        return String(noteString.prefix(1))
+    }
+
+    // Calculate staff position for scale notes ensuring ascending order
+    // Rule: Start as low as possible (E is lowest), always go up
+    private func staffPositionForScaleNote(_ note: Note, index: Int, allNotes: [Note]) -> (CGFloat, String?) {
+        let baseLetter = baseNoteLetter(note)
+        let accidental = accidentalForNote(note)
+
+        // Letter positions on staff (ascending from E at bottom)
+        // E is the lowest drawable note per specs
+        let letterPositions: [String: [CGFloat]] = [
+            "E": [3.0],      // E below staff (space below bottom line)
+            "F": [2.5, -2.0], // F options
+            "G": [2.0, -3.0], // G options (bottom line or top space)
+            "A": [1.5, -4.0], // A options (space or top line)
+            "B": [1.0, -5.0], // B options (2nd line or ledger above)
+            "C": [0.5, 1.0],  // C options (space above B)
+            "D": [0.0, 4.0]   // D options (middle line)
+        ]
+
+        // Find previous note's position to ensure we go higher
+        var minPosition: CGFloat = 3.0 // Start from E (lowest)
+
+        if index > 0 {
+            let previousNote = allNotes[index - 1]
+            let (prevPos, _) = staffPositionForScaleNote(previousNote, index: index - 1, allNotes: allNotes)
+            minPosition = prevPos - 0.5 // Next note must be at least 0.5 steps higher (up)
+        }
+
+        // Find the best position for this letter that is higher than previous
+        if let positions = letterPositions[baseLetter] {
+            for pos in positions.sorted(by: >) { // Sort descending (lower values = higher on staff)
+                if pos < minPosition {
+                    return (pos, accidental)
+                }
+            }
+            // If no valid position found, use the highest available
+            return (positions.min() ?? 0.0, accidental)
+        }
+
+        // Fallback to standard position
+        return (yOffsetForNote(note), accidental)
     }
 }
 
