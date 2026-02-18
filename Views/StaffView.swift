@@ -88,40 +88,65 @@ struct StaffView: View {
     }
 
     // Calculate Y offset for note position on staff
-    // Bass clef: Lines from bottom to top are G2, B2, D3, F3, A3
-    // Spaces from bottom to top are A2, C3, E3, G3
-    // Position 0 = A3 (top line), increasing numbers go down
+    // Bass clef staff lines (bottom to top): G2, B2, D3, F3, A3
+    // Notes are C4-B4 (middle C octave), displayed above bass clef staff
+    // Using A3 (top line) as reference point (position 0)
     private func yOffsetForNote(_ note: Note) -> CGFloat {
         let notePositions: [Note: CGFloat] = [
-            .C: 5.0,      // C3 - second space
-            .CSharp: 4.5, // C#3/Db3
-            .D: 4.0,      // D3 - middle line
-            .DSharp: 3.5, // D#3/Eb3
-            .E: 3.0,      // E3 - third space
-            .F: 2.0,      // F3 - fourth line
-            .FSharp: 1.5, // F#3/Gb3
-            .G: 1.0,      // G3 - top space
-            .GSharp: 0.5, // G#3/Ab3
-            .A: 0.0,      // A3 - top line
-            .ASharp: -0.5, // A#3/Bb3 - above staff
-            .B: -1.0,     // B3 - ledger line above
+            .C: -2.0,      // C4 - middle C, first ledger line above staff
+            .CSharp: -2.5, // C#4/Db4
+            .D: -3.0,      // D4 - above ledger line
+            .DSharp: -3.5, // D#4/Eb4
+            .E: -4.0,      // E4 - second ledger line above
+            .F: -5.0,      // F4 - above second ledger line
+            .FSharp: -5.5, // F#4/Gb4
+            .G: -6.0,      // G4 - third ledger line above
+            .GSharp: -6.5, // G#4/Ab4
+            .A: -7.0,      // A4 - above third ledger line
+            .ASharp: -7.5, // A#4/Bb4
+            .B: -8.0,      // B4 - fourth ledger line above
         ]
 
         let position = notePositions[note] ?? 0.0
         let spacing = staffLineSpacing / 2.0
 
-        // Convert position to Y offset (positive = down)
+        // Convert position to Y offset (positive = down, negative = up)
         return position * spacing
     }
 
-    // Determine if ledger lines are needed
+    // Determine if ledger lines are needed for notes above the staff
     private func ledgerLinesForNote(_ note: Note) -> [CGFloat] {
         var ledgerLines: [CGFloat] = []
 
-        // Add ledger lines for notes above the staff
-        if note == .B {
-            // B3 needs one ledger line above A3
+        // All notes C4-B4 are above the staff and need ledger lines
+        switch note {
+        case .C, .CSharp:
+            // C4: first ledger line above staff
             ledgerLines.append(-staffLineSpacing)
+        case .D, .DSharp:
+            // D4: above C4, still needs C4 ledger line
+            ledgerLines.append(-staffLineSpacing)
+        case .E:
+            // E4: second ledger line
+            ledgerLines.append(-staffLineSpacing)
+            ledgerLines.append(-staffLineSpacing * 2)
+        case .F, .FSharp:
+            // F4: above E4
+            ledgerLines.append(-staffLineSpacing)
+            ledgerLines.append(-staffLineSpacing * 2)
+        case .G, .GSharp:
+            // G4: third ledger line
+            ledgerLines.append(-staffLineSpacing)
+            ledgerLines.append(-staffLineSpacing * 2)
+            ledgerLines.append(-staffLineSpacing * 3)
+        case .A, .ASharp, .B:
+            // A4-B4: need all ledger lines up to fourth
+            ledgerLines.append(-staffLineSpacing)
+            ledgerLines.append(-staffLineSpacing * 2)
+            ledgerLines.append(-staffLineSpacing * 3)
+            if note == .B {
+                ledgerLines.append(-staffLineSpacing * 4)
+            }
         }
 
         return ledgerLines
