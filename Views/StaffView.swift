@@ -47,11 +47,12 @@ struct StaffView: View {
 
                     // Display multiple notes if provided (for scale mode)
                     if let notes = displayedNotes {
+                        let positions = isScaleMode ? calculateScalePositions(notes) : notes.map { yOffsetForNote($0) }
+
                         ForEach(Array(notes.enumerated()), id: \.offset) { index, note in
                             let xOffset: CGFloat = 60 + CGFloat(index) * 25
-                            let (position, accidental) = isScaleMode ?
-                                staffPositionForScaleNote(note, index: index, allNotes: notes) :
-                                (yOffsetForNote(note), accidentalForNote(note))
+                            let position = positions[index]
+                            let accidental = accidentalForNote(note)
 
                             // Accidental (sharp or flat)
                             if let acc = accidental {
@@ -187,46 +188,28 @@ struct StaffView: View {
         return String(noteString.prefix(1))
     }
 
-    // Calculate staff position for scale notes ensuring ascending order
+    // Calculate positions for all notes in scale ensuring ascending order
     // Rule: Start as low as possible (E is lowest), always go up
-    private func staffPositionForScaleNote(_ note: Note, index: Int, allNotes: [Note]) -> (CGFloat, String?) {
-        let baseLetter = baseNoteLetter(note)
-        let accidental = accidentalForNote(note)
+    private func calculateScalePositions(_ notes: [Note]) -> [CGFloat] {
+        var positions: [CGFloat] = []
 
-        // Letter positions on staff (ascending from E at bottom)
-        // E is the lowest drawable note per specs
-        let letterPositions: [String: [CGFloat]] = [
-            "E": [3.0],      // E below staff (space below bottom line)
-            "F": [2.5, -2.0], // F options
-            "G": [2.0, -3.0], // G options (bottom line or top space)
-            "A": [1.5, -4.0], // A options (space or top line)
-            "B": [1.0, -5.0], // B options (2nd line or ledger above)
-            "C": [0.5, 1.0],  // C options (space above B)
-            "D": [0.0, 4.0]   // D options (middle line)
-        ]
+        for (index, note) in notes.enumerated() {
+            var position = yOffsetForNote(note)
 
-        // Find previous note's position to ensure we go higher
-        var minPosition: CGFloat = 3.0 // Start from E (lowest)
-
-        if index > 0 {
-            let previousNote = allNotes[index - 1]
-            let (prevPos, _) = staffPositionForScaleNote(previousNote, index: index - 1, allNotes: allNotes)
-            minPosition = prevPos - 0.5 // Next note must be at least 0.5 steps higher (up)
-        }
-
-        // Find the best position for this letter that is higher than previous
-        if let positions = letterPositions[baseLetter] {
-            for pos in positions.sorted(by: >) { // Sort descending (lower values = higher on staff)
-                if pos < minPosition {
-                    return (pos, accidental)
+            // Ensure this note is higher (lower Y value) than previous
+            if index > 0 {
+                let prevPosition = positions[index - 1]
+                // If current position is not higher than previous, adjust it
+                if position >= prevPosition {
+                    // Move up by at least 0.5 step (half space)
+                    position = prevPosition - 0.5
                 }
             }
-            // If no valid position found, use the highest available
-            return (positions.min() ?? 0.0, accidental)
+
+            positions.append(position)
         }
 
-        // Fallback to standard position
-        return (yOffsetForNote(note), accidental)
+        return positions
     }
 }
 
